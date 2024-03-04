@@ -1,27 +1,60 @@
 # Example file showing a basic pygame "game loop"
-import pygame
-
+import pygame as p
+import asyncio
 # pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
+p.init()
+screen = p.display.set_mode((1280, 720))
+clock = p.time.Clock()
 running = True
 
+player = p.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+
+p.mixer.music.load('speedOfLight.mp3')
+p.mixer.music.set_volume(0.05)
+p.mixer.music.play()
+
+
+xv = 0
+yv = 0
+f = 255
+
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in p.event.get():
+        if event.type == p.QUIT:
             running = False
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    dt = clock.tick(60) / 1000
+    
+    f *= 0.95
 
-    # RENDER YOUR GAME HERE
+    screen.fill(p.Color(round(f), round(f), round(f)))
+    
+    p.draw.circle(screen, (p.Color(round(255 - f), round(255 - f), round(255 - f))), player, 40)
+    
+    keys = p.key.get_pressed()
+    
+    xv *= 0.95  + (keys[p.K_SPACE] * 0.045)
+    yv *= 0.95  + (keys[p.K_SPACE] * 0.045)
+    
+    f += (keys[p.K_SPACE] * 15)
+    if f > 250:
+        f = 250
+                
+    yv += (keys[p.K_w] - keys[p.K_s]) * 15 * dt
+    xv += (keys[p.K_a] - keys[p.K_d]) * 15 * dt
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+    player.y -= yv
+    player.x -= xv
+    
+    if player.y > 760:
+        player.y = -40
+    if player.y < -40:
+        player.y = 760
+    if player.x > 1320:
+        player.x = -40
+    if player.x < -40:
+        player.x = 1320
+                    
+    p.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
-
-pygame.quit() 
+p.quit() 
