@@ -28,7 +28,7 @@ while running:
 
     screen.fill(p.Color(round(f), round(f), round(f)))
     
-    p.draw.circle(screen, (p.Color(round(255 - f), round(255 - f), round(255 - f))), player, 40)
+    p.draw.circle(screen, (p.Color(round(255 - f), round(255 - f), round(255 - f))), player, 20)
     
     keys = p.key.get_pressed()
     
@@ -37,6 +37,11 @@ while running:
     
     yv += (keys[p.K_w] - keys[p.K_s]) * 15 * dt
     xv += (keys[p.K_a] - keys[p.K_d]) * 15 * dt
+    
+    if keys[p.K_SPACE]:
+        f += (255 - f)/25
+    else:
+        f += (0 - f)/25
 
     player.y -= yv
     player.x -= xv
