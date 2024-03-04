@@ -1,6 +1,6 @@
-# Example file showing a basic pygame "game loop"
 import pygame as p
-import asyncio
+from random import randint
+
 # pygame setup
 p.init()
 screen = p.display.set_mode((1280, 720))
@@ -13,10 +13,9 @@ p.mixer.music.load('speedOfLight.mp3')
 p.mixer.music.set_volume(0.05)
 p.mixer.music.play()
 
-
 xv = 0
 yv = 0
-f = 255
+f = 0 
 
 while running:
     for event in p.event.get():
@@ -24,8 +23,8 @@ while running:
             running = False
 
     dt = clock.tick(60) / 1000
-    
-    f *= 0.95
+
+ # Reset 'f' to 0 when it reaches 255
 
     screen.fill(p.Color(round(f), round(f), round(f)))
     
@@ -33,13 +32,9 @@ while running:
     
     keys = p.key.get_pressed()
     
-    xv *= 0.95  + (keys[p.K_SPACE] * 0.045)
-    yv *= 0.95  + (keys[p.K_SPACE] * 0.045)
+    xv *= 0.95 + (keys[p.K_SPACE] * 0.045)
+    yv *= 0.95 + (keys[p.K_SPACE] * 0.045)
     
-    f += (keys[p.K_SPACE] * 15)
-    if f > 250:
-        f = 250
-                
     yv += (keys[p.K_w] - keys[p.K_s]) * 15 * dt
     xv += (keys[p.K_a] - keys[p.K_d]) * 15 * dt
 
@@ -57,4 +52,4 @@ while running:
                     
     p.display.flip()
 
-p.quit() 
+p.quit()
